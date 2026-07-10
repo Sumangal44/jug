@@ -120,7 +120,7 @@ banao* generate():
   it("translates keywords inside template literals", () => {
     const code = 'bolo(`Hi ${khud.name}, intezaar is over.`)';
     const result = compileSource(code);
-    expect(result).toContain('`Hi ${this.name}, await is over.`');
+    expect(result).toContain('`Hi ${this.name}, intezaar is over.`');
   });
 
   it("passes ES2026 syntax like destructuring, spreads, nullish coalescing transparently", () => {

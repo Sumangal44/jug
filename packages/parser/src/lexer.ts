@@ -131,13 +131,38 @@ export function tokenize(text: string) {
     outTokens.push({ image: "\n}", tokenType: AnyChar } as any);
   }
 
+  // Inject parentheses for if, while, for, catch
+  for (let i = 0; i < outTokens.length; i++) {
+    const token = outTokens[i];
+    if (token.tokenType === Identifier && ["if", "else if", "while", "for", "catch"].includes(token.image)) {
+      let j = i + 1;
+      while (j < outTokens.length && outTokens[j].tokenType === WhiteSpace) {
+        j++;
+      }
+      
+      if (j < outTokens.length && outTokens[j].image !== "(") {
+         outTokens.splice(j, 0, { image: "(", tokenType: AnyChar } as any);
+         
+         let k = j + 1;
+         // Find end of condition (colon, open brace, or newline)
+         while (k < outTokens.length && outTokens[k].image !== ":" && outTokens[k].image !== "{" && outTokens[k].tokenType !== Newline) {
+            k++;
+         }
+         
+         if (k < outTokens.length) {
+            let endPos = k;
+            while (endPos > j && outTokens[endPos - 1].tokenType === WhiteSpace) {
+                endPos--;
+            }
+            outTokens.splice(endPos, 0, { image: ")", tokenType: AnyChar } as any);
+         }
+      }
+    }
+  }
+
   // Final cleanup pass to remove Python-specific colons (e.g. `agar x == 1:`) before blocks
-  // In JS, we don't need them.
   for (let i = 0; i < outTokens.length; i++) {
      if (outTokens[i].image === ":" && outTokens[i].tokenType === AnyChar) {
-        // Just remove the colon if it's likely a block starter (e.g. followed by newline)
-        // Or honestly, we can just replace all stray colons not in ternary or objects.
-        // Actually, to be safe, if a colon is followed by a Newline or { we can strip it.
         let nextIdx = i + 1;
         while (nextIdx < outTokens.length && outTokens[nextIdx].tokenType === WhiteSpace) {
             nextIdx++;
