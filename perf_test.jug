@@ -1,0 +1,36 @@
+// Performance Test: Recursive Fibonacci
+banao fib(n):
+    agar n < 2:
+        wapas n
+    wapas fib(n - 1) + fib(n - 2)
+
+// Performance Test: Large Loop Array Sum
+banao arraySum(size):
+    rakho arr = []
+    ghumo rakho i = 0; i < size; i++:
+        arr.push(i)
+    
+    rakho sum = 0
+    ghumo rakho item ka arr:
+        sum = sum + item
+    wapas sum
+
+bolo("⏳ Starting Performance Tests...")
+
+// We can use JS Date.now() directly because global variables map natively to JS
+rakho start = Date.now()
+
+rakho f = fib(35)
+bolo("✅ Fibonacci(35): " + f)
+
+rakho endFib = Date.now()
+bolo("⏱️  Fibonacci Time: " + (endFib - start) + "ms")
+
+rakho sumStart = Date.now()
+rakho s = arraySum(10000000)
+bolo("✅ Array Sum (10 Million): " + s)
+
+rakho endSum = Date.now()
+bolo("⏱️  Array Loop Time: " + (endSum - sumStart) + "ms")
+
+bolo("🏆 Total Execution Time: " + (endSum - start) + "ms")

@@ -34,12 +34,14 @@ Object.assign(KEYWORD_MAP, {
   "warna": "else",
   "ghumo": "for",
   "jabtak": "while",
+  "karo": "do",
   "banao": "function",
   "wapas": "return",
   "ustad": "class",
   "khud": "this",
   "lao": "import",
   "se": "from",
+  "bhejo": "export",
   "rukja": "break",
   "chalte_raho": "continue",
   "koshish": "try",
@@ -56,7 +58,44 @@ Object.assign(KEYWORD_MAP, {
   "intezaar": "await",
   "baanto": "yield",
   "maanlo": "let",
-  "pakka": "const"
+  "pakka": "const",
+  "rakho": "let",
+  "chuno": "switch",
+  "mamla": "case",
+  "warna_sab": "default",
+  "virasat": "extends",
+  "shuru": "constructor",
+  "maha_ustad": "super",
+  "naya": "new",
+  "sthir": "static",
+  "pao": "get",
+  "rakho_moolya": "set",
+  "kya_ye": "instanceof",
+  "misaal": "instanceof",
+  "prakar": "typeof",
+  "hatao": "delete",
+  "mein": "in",
+  "ka": "of",
+  "khali": "void",
+  "pakdo_bug": "debugger",
+  "saath": "with",
+  "pata_nahi": "undefined",
+  "samajh_nahi_aya": "NaN",
+  "anant": "Infinity",
+  "soochi": "enum",
+  "sampark": "interface",
+  "potli": "package",
+  "nijji": "private",
+  "surakshit": "protected",
+  "sarvajanik": "public",
+  "bilkul_barabar": "===",
+  "bilkul_alag": "!==",
+  "barabar": "==",
+  "alag": "!=",
+  "bada": ">",
+  "chhota": "<",
+  "bada_ya_barabar": ">=",
+  "chhota_ya_barabar": "<="
 });
 
 export function tokenize(text: string) {
@@ -69,6 +108,8 @@ export function tokenize(text: string) {
   // Pre-process indentation and tokens
   const outTokens: IToken[] = [];
   const indentStack = [0];
+  const scopeStack = ["global"];
+  let nextScope: string | null = null;
   let isNewLine = true;
 
   for (let i = 0; i < lexResult.tokens.length; i++) {
@@ -85,6 +126,9 @@ export function tokenize(text: string) {
       continue;
     }
 
+    if (token.image === "ustad") nextScope = "class";
+    if (token.image === "banao" && nextScope !== "class") nextScope = "function";
+
     if (isNewLine) {
       let currentIndent = 0;
       if (token.tokenType === WhiteSpace) {
@@ -94,11 +138,14 @@ export function tokenize(text: string) {
       const prevIndent = indentStack[indentStack.length - 1];
       if (currentIndent > prevIndent) {
         indentStack.push(currentIndent);
+        scopeStack.push(nextScope || "block");
+        nextScope = null;
         // Inject open brace
         outTokens.push({ image: "{", tokenType: AnyChar } as any);
       } else if (currentIndent < prevIndent) {
         while (indentStack.length > 1 && currentIndent < indentStack[indentStack.length - 1]) {
           indentStack.pop();
+          scopeStack.pop();
           // Inject close brace
           outTokens.push({ image: "}", tokenType: AnyChar } as any);
         }
@@ -109,7 +156,14 @@ export function tokenize(text: string) {
     // Translate keywords
     if (token.tokenType === Identifier && KEYWORD_MAP[token.image]) {
       const jsKeyword = KEYWORD_MAP[token.image];
-      outTokens.push({ ...token, image: jsKeyword } as any);
+      
+      // If we are inside a class scope and we see "banao", just drop it (JS classes don't use the function keyword for methods)
+      if (token.image === "banao" && scopeStack[scopeStack.length - 1] === "class") {
+        // Drop the token by not pushing it
+        // We also need to drop the trailing space if there is one, but we'll just emit nothing
+      } else {
+        outTokens.push({ ...token, image: jsKeyword } as any);
+      }
     } else if (token.tokenType === BacktickString) {
       // Translate keywords inside template literal interpolations ${...}
       const translatedImage = token.image.replace(/\$\{([^}]+)\}/g, (match: string, expr: string) => {
@@ -131,10 +185,10 @@ export function tokenize(text: string) {
     outTokens.push({ image: "\n}", tokenType: AnyChar } as any);
   }
 
-  // Inject parentheses for if, while, for, catch
+  // Inject parentheses for if, while, for, catch, switch
   for (let i = 0; i < outTokens.length; i++) {
     const token = outTokens[i];
-    if (token.tokenType === Identifier && ["if", "else if", "while", "for", "catch"].includes(token.image)) {
+    if (token.tokenType === Identifier && ["if", "else if", "while", "for", "catch", "switch"].includes(token.image)) {
       let j = i + 1;
       while (j < outTokens.length && outTokens[j].tokenType === WhiteSpace) {
         j++;
@@ -168,7 +222,17 @@ export function tokenize(text: string) {
             nextIdx++;
         }
         if (nextIdx < outTokens.length && (outTokens[nextIdx].tokenType === Newline || outTokens[nextIdx].image === "{")) {
-            outTokens[i].image = ""; // erase it
+            // Check if this line starts with case or default
+            let lineStart = i;
+            while (lineStart > 0 && outTokens[lineStart].tokenType !== Newline) {
+              lineStart--;
+            }
+            const lineTokens = outTokens.slice(lineStart, i);
+            const isCaseOrDefault = lineTokens.some(t => t.image === "case" || t.image === "default");
+            
+            if (!isCaseOrDefault) {
+              outTokens[i].image = ""; // erase it
+            }
         }
      }
   }

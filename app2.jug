@@ -1,0 +1,2 @@
+lao fs se "node:fs"
+bolo(Object.keys(fs).slice(0, 5))

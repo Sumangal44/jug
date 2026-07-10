@@ -26,19 +26,34 @@ warna:
     expect(result).toContain("}");
   });
 
-  it("compiles loops (for/while) with break/continue", () => {
+  it("compiles all loops (for, while, do-while, for...of, for...in)", () => {
     const code = `
-ghumo (maanlo i = 0; i < 10; i++):
+ghumo rakho i = 0; i < 10; i++:
   agar i == 5:
     chalte_raho
-  jabtak sahi:
-    rukja
+
+jabtak sahi:
+  rukja
+
+ghumo item ka list:
+  bolo(item)
+
+ghumo key mein object:
+  bolo(key)
+
+karo:
+  bolo("hello")
+jabtak x < 5
 `;
     const result = compileSource(code);
     expect(result).toContain("for (let i = 0; i < 10; i++)");
     expect(result).toContain("continue");
     expect(result).toContain("while (true)");
     expect(result).toContain("break");
+    expect(result).toContain("for (item of list)");
+    expect(result).toContain("for (key in object)");
+    expect(result).toContain("do");
+    expect(result).toContain("while (x < 5)");
   });
 
   it("compiles functions and returns", () => {

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "JugaadLang",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#comments"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.jugaad",
+          "match": "\\b(agar|shayad|warna|ghumo|jabtak|karo|wapas|koshish|gadbad|aakhir_me|udao|rukja|chalte_raho|tez|intezaar|baanto|chuno|mamla|warna_sab|saath|pakdo_bug)\\b"
+        },
+        {
+          "name": "storage.type.jugaad",
+          "match": "\\b(maanlo|pakka|rakho|ustad|banao|soochi|sampark|potli)\\b"
+        },
+        {
+          "name": "storage.modifier.jugaad",
+          "match": "\\b(sthir|pao|rakho_moolya|nijji|surakshit|sarvajanik)\\b"
+        },
+        {
+          "name": "keyword.control.import.jugaad",
+          "match": "\\b(lao|se|bhejo)\\b"
+        },
+        {
+          "name": "constant.language.jugaad",
+          "match": "\\b(sahi|galat|kuch_nahi|pata_nahi|samajh_nahi_aya|anant)\\b"
+        },
+        {
+          "name": "variable.language.this.jugaad",
+          "match": "\\b(khud|maha_ustad)\\b"
+        },
+        {
+          "name": "keyword.operator.new.jugaad",
+          "match": "\\b(naya)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.jugaad",
+          "match": "\\b(aur|ya|nahi|kya_ye|misaal|prakar|hatao|mein|ka|khali)\\b"
+        },
+        {
+          "name": "keyword.operator.comparison.jugaad",
+          "match": "\\b(bilkul_barabar|bilkul_alag|barabar|alag|bada|chhota|bada_ya_barabar|chhota_ya_barabar)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.jugaad",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.jugaad",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.jugaad",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.jugaad",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.template.jugaad",
+          "begin": "`",
+          "end": "`",
+          "patterns": [
+            {
+              "name": "constant.character.escape.jugaad",
+              "match": "\\\\."
+            },
+            {
+              "name": "meta.template.expression.jugaad",
+              "begin": "\\$\\{",
+              "end": "\\}",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.jugaad",
+          "match": "#.*$"
+        },
+        {
+          "name": "comment.line.double-slash.jugaad",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.jugaad",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.jug"
+}

@@ -2,7 +2,7 @@
 
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { compileSource } from "@jugaad/compiler";
+import { compileSource, getFunnyError } from "@jugaad/compiler";
 import * as runtime from "@jugaad/runtime";
 import repl from "node:repl";
 import vm from "node:vm";
@@ -26,11 +26,13 @@ if (command === "run") {
     const sourceCode = readFileSync(fullPath, "utf-8");
     const jsCode = compileSource(sourceCode);
     
-    // Evaluate the compiled code
-    eval(jsCode);
+    // Execute using dynamic import to fully support ESM (imports, top-level await)
+    const dataUri = "data:text/javascript," + encodeURIComponent(jsCode);
+    import(dataUri).catch(err => {
+      console.error(chalk.red(getFunnyError(err)));
+    });
   } catch (error: any) {
-    console.error(chalk.red("🤦 Bhai kya likh diya?\n"));
-    console.error(error.message);
+    console.error(chalk.red(getFunnyError(error)));
   }
 } else if (command === "repl") {
   console.log(chalk.green.bold("JugaadLang v1.0 Interactive REPL"));
@@ -51,8 +53,8 @@ if (command === "run") {
         if (error instanceof SyntaxError) {
            return callback(new repl.Recoverable(error), null);
         }
-        console.error(chalk.red("🤦 Bhai kya likh diya?"));
-        callback(error, null);
+        console.error(chalk.red(getFunnyError(error)));
+        callback(null, null); // Don't crash REPL
       }
     }
   });

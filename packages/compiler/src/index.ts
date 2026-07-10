@@ -1,4 +1,5 @@
 import { tokenize } from "@jugaad/parser";
+export { getFunnyError } from "./errors";
 
 export function compileSource(sourceCode: string): string {
   const lexResult = tokenize(sourceCode);

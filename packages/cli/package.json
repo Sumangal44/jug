@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs",
-    "dev": "tsup src/index.ts --format cjs --watch"
+    "dev": "tsup src/index.ts --format cjs --watch",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@jugaad/compiler": "*",

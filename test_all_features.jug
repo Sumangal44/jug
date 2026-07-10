@@ -1,0 +1,100 @@
+// All Features Test
+
+// Variable Declarations
+maanlo a = 1
+pakka b = 2
+rakho c = 3
+
+// Control Flow
+agar a == 1:
+    bolo("if works")
+shayad a == 2:
+    bolo("else if works")
+warna:
+    bolo("else works")
+
+chuno a:
+    mamla 1:
+        bolo("switch works")
+        rukja
+    warna_sab:
+        bolo("default works")
+
+// Loops
+ghumo rakho i = 0; i < 1; i++:
+    bolo("for works")
+
+rakho arr = [1, 2]
+ghumo rakho item ka arr:
+    bolo("for of works")
+
+rakho obj = { x: 1 }
+ghumo rakho key mein obj:
+    bolo("for in works")
+
+rakho count = 0
+jabtak count < 1:
+    count++
+    bolo("while works")
+
+karo:
+    bolo("do while works")
+jabtak count < 0
+
+// Functions
+banao add(x, y):
+    wapas x + y
+bolo(add(1, 2))
+
+rakho arrow = (x) => x * 2
+bolo(arrow(5))
+
+// Classes & Inheritance
+ustad Person:
+    banao shuru(naam):
+        khud.naam = naam
+    
+    banao hello():
+        bolo("Hello " + khud.naam)
+
+ustad Employee virasat Person:
+    banao shuru(naam, role):
+        maha_ustad(naam)
+        khud.role = role
+
+rakho emp = naya Employee("Sumu", "Dev")
+emp.hello()
+
+// Async/Await
+tez banao fetchData():
+    wapas Vaada.resolve("data")
+
+tez banao run():
+    rakho res = intezaar fetchData()
+    bolo(res)
+
+intezaar run()
+
+// Generators
+banao* gen():
+    baanto 1
+    baanto 2
+
+// Error Handling
+koshish:
+    udao naya Error("Oops")
+gadbad (e):
+    bolo("caught")
+aakhir_me:
+    bolo("finally")
+
+// ES2026 Features
+rakho spread = [...arr]
+rakho {x} = obj
+rakho naam = obj?.name ?? "Guest"
+
+// Globals
+rakho s = naya Samuh()
+s.add(1)
+rakho m = naya Naksha()
+m.set("k", "v")

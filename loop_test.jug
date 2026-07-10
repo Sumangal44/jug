@@ -1,0 +1,15 @@
+ghumo rakho i = 0; i < 10; i++:
+    bolo(i)
+
+ghumo item ka list:
+    bolo(item)
+
+ghumo key mein object:
+    bolo(key)
+
+jabtak score > 0:
+    score--
+
+karo:
+    bolo("hello")
+jabtak x < 5

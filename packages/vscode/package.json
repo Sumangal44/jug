@@ -1,0 +1,58 @@
+{
+  "name": "jugaadlang-vscode",
+  "displayName": "JugaadLang Support",
+  "description": "Language support and LSP for JugaadLang",
+  "version": "0.1.0",
+  "publisher": "jugaadlang",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:jugaad"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "jugaad",
+        "aliases": [
+          "JugaadLang",
+          "jugaad"
+        ],
+        "extensions": [
+          ".jug"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "jugaad",
+        "scopeName": "source.jug",
+        "path": "./syntaxes/jugaad.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "package": "vsce package",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@jugaad/lsp": "*",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^3.9.2",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}
