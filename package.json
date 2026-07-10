@@ -1,0 +1,23 @@
+{
+  "name": "jugaadlang",
+  "private": true,
+  "packageManager": "npm@12.0.1",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\""
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "latest",
+    "@types/node": "latest",
+    "vitest": "latest",
+    "prettier": "latest"
+  }
+}

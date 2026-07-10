@@ -1,0 +1,27 @@
+# Testing 100% ESM2026 features in JugaadLang!
+
+ustad Person:
+  constructor(naam):
+    khud.naam = naam
+  
+  greet():
+    bolo(`Namaste, mera naam ${khud.naam} hai.`)
+
+maanlo person = new Person("Sumangal")
+person.greet()
+
+tez banao fetchData():
+  wapas new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: "Secret API Data" })
+    }, 100)
+  })
+
+tez banao main():
+  koshish:
+    maanlo { data } = intezaar fetchData()
+    bolo("Data mil gaya: " + data)
+  gadbad (e):
+    bolo("Error ho gaya!", e)
+
+main()

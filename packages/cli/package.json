@@ -1,0 +1,21 @@
+{
+  "name": "@jugaad/cli",
+  "version": "0.1.0",
+  "bin": {
+    "jug": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs",
+    "dev": "tsup src/index.ts --format cjs --watch"
+  },
+  "dependencies": {
+    "@jugaad/compiler": "*",
+    "@jugaad/runtime": "*",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3"
+  }
+}
