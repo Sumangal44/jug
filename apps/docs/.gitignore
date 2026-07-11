@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# VitePress specific files
+.vitepress/dist
+.vitepress/cache

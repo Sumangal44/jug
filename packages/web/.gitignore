@@ -1,0 +1,6 @@
+node_modules/
+dist/
+/.turbo/
+# VitePress specific files
+.vitepress/dist
+.vitepress/cache
